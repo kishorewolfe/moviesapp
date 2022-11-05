@@ -1,22 +1,19 @@
 import React, { useEffect } from 'react'
-import MoviesApi from '../../../apis/MoviesApi'
 import MovieDetail from '../../Movies/MovieDetail/MovieDetail'
-import {MOVIE_API_KEY} from '../../../apis/MoviesApiKey'
+import { useDispatch } from 'react-redux'
+import { fetchMoviesAsyncThunk,fetchSeriesAsyncThunk } from '../../../store/movies/MoviesSlice'
+import MovieList from '../../Movies/MovieList/MovieList'
 const Home = () => {
+    const dispatch = useDispatch();
+
     useEffect(()=>{
-        const fetchFunc = async ()=>{
-            const movieName="batman"
-            const movieData = await MoviesApi.get(`?apiKey=${MOVIE_API_KEY}&s=${movieName}&type=movie`).catch((err)=>{
-                console.log("err",err)
-            })
-            console.log(movieData)
-        }
-        fetchFunc()
-    },[])
+            dispatch(fetchMoviesAsyncThunk())
+            dispatch(fetchSeriesAsyncThunk())
+    },[dispatch])
   return (
     <div>
         <h1>Home</h1>
-        <MovieDetail/>
+        <MovieList/>
     </div>
   )
 }
