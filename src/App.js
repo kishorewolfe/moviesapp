@@ -8,6 +8,7 @@ import PageNotFound from './Components/UI/PageNotFound/PageNotFound';
 import Header from './Components/Layout/Header/Header';
 import Footer from './Components/Layout/Footer/Footer';
 import MovieList from './Components/Movies/MovieList/MovieList';
+import ShowsList from './Components/Movies/Shows/ShowsList';
 function App() {
   return (
     <div className="App">
@@ -15,6 +16,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/movieDetails/:imdbID' element={<MovieDetail/>}/>
+        <Route path='/ShowsList' element={<ShowsList/>}/>
+
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
       <Footer/>

@@ -10,11 +10,11 @@ const MovieCard = ({movie}) => {
   return (
     <>
     <Link to={`/movieDetails/${movie.imdbID}`}>
-    <Card sx={{ maxWidth: 6645 }} className="card-item">
+    <Card sx={{ maxWidth: 640 }} className="card-item">
       <CardActionArea>
         <CardMedia
           component="img"
-          height="260"
+          height="270"
           image={movie.Poster}
           alt={movie.Type}
         />

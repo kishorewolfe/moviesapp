@@ -10,6 +10,9 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
+
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,10 +21,13 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { getBothMorS } from "../../../store/movies/MoviesSlice";
+import { getBothMorS } from "../../../store/movies/MoviesSlice"; 
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { Table } from "@mui/material";
+import MoviesInfo from "./MoviesInfo";
+import { removeMorSstate } from "../../../store/movies/MoviesSlice";
+import Spinner from "./Spinner";
 
 const MovieDetail = () => {
   let { imdbID } = useParams();
@@ -33,13 +39,18 @@ const MovieDetail = () => {
 
   useEffect(() => {
     dispatch(fetchMandSAsyncThunk(imdbID));
+    return ()=>{
+      dispatch(removeMorSstate())
+    }
   }, [dispatch, imdbID]);
   console.log("the data is ", data);
 
   return (
     <div className="detailspage">
       <Container fixed className="containerMovieDetail">
-        <Box>
+        {Object.keys(data).length===0 ?
+          <Spinner/> : <>
+                <Box>
           <Grid container spacing={2}>
             <Grid item xs={8}>
               <Box>
@@ -57,21 +68,54 @@ const MovieDetail = () => {
                       <Typography variant="h5" component="div"></Typography>
                       <Typography sx={{ mb: 1.5 }} color="text.primary">
                         <span>
-                          IMDB Rating{" "}
-                          <StarBorderPurple500Icon style={{ color: "gold" }} />{" "}
-                          : {data.imdbRating}
-                        </span>{" "}
+                          <Chip
+                            avatar={
+                              <StarBorderPurple500Icon
+                                style={{ color: "gold" }}
+                              />
+                            }
+                            label={`IMDB Rating ${data.imdbRating}`}
+                            variant="outlined"
+                          />
+                        </span> {" "}
                         <span>
-                          IMDB Votes <ThumbUpAltIcon /> : {data.imdbVotes}
-                        </span>{" "}
-                        <span>
-                          Runtime <TheatersIcon /> : {data.Runtime}
-                        </span>{" "}
-                        <span>
-                          Year <CalendarMonthIcon /> : {data.Year}
-                        </span>{" "}
+                          <Chip
+                            avatar={
+                              <ThumbUpAltIcon
+                             
+                              />
+                            }
+                            label={`IMDB Votes ${data.imdbVotes}`}
+                            variant="outlined"
+                          />
+                        </span>
+                      {" "}
+                      <span>
+                          <Chip
+                            avatar={
+                              <TheatersIcon
+                             
+                              />
+                            }
+                            label={`Runtime ${data.Runtime}`}
+                            variant="outlined"
+                          />
+                        </span>
+                      {" "}
+                      <span>
+                          <Chip
+                            avatar={
+                              <CalendarMonthIcon
+                             
+                              />
+                            }
+                            label={`Year ${data.Year}`}
+                            variant="outlined"
+                          />
+                        </span>
+                      {" "}
                       </Typography>
-                      <Typography variant="body2">
+                      <Typography variant="body2" align="justify">
                         {data.Plot}
                         <br />
                         {""}
@@ -82,16 +126,19 @@ const MovieDetail = () => {
                     </CardActions>
                   </Card>
                 </div>
+                <MoviesInfo movie={data}/>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={4} >
               <Card />
-              <img src={data.Poster} height="560" />
+              <img src={data.Poster}  className="responsive" />
 
               <Card />
             </Grid>
           </Grid>
         </Box>
+          </>  
+      }
       </Container>
     </div>
   );
